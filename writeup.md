@@ -31,17 +31,32 @@ Then findChessboardCorners OpenCV function was used to get the 2D image points. 
 
 _note: Processing calibration1.jpg calibration4.jpg and calibration5.jpg were failed. There were missing corners on these images, I think._  
 
-![Corrected image:](http://github.com/windmip/CarND-Advanced-Lane-Lines/output_images/calibrated.jpg)
+##### A Corrected chessboard image:
+
+![Corrected image:](https://github.com/windmip/CarND-Advanced-Lane-Lines/blob/master/output_images/calibrated.jpg)
 
 ### Pipeline (single images)
 
-#### 1. Provide an example of a distortion-corrected image.
+#### 1. Provide an example of a distortion-corrected image:
 
+![Corrected image:](https://github.com/windmip/CarND-Advanced-Lane-Lines/blob/master/output_images/calibrated_test2.jpg)
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
+In the 5th code cell, the create_warped_binary_image function contains these transforms. First, the image was converted to HSV color space. Then three binary images were made, each of them contains a filter:
+* Filter 1 (displayed with red color) makes the x oriented derivations using the Sobel operator. The input is V(value) value of HSV values on each pixel. Value is something like brightness, so the result shows the x oriented gradients. Threshold parameters were given in the function header (32,255)
+* Filter 2 (displayed with green color) is based on saturation value, and 
+* Filter 3 (displayed with blue color) is based on hue. The bounds were 235,250 and 20,40 repeatedly. I found the combination of this one, and previous one useful finding the yellow line in shadows
 
+Raw data of filter 2 and 3 could be used directly, filter 1 had to be converted to unsigned byte from float first. Here is a  stacked RGB example of it: 
+
+![Corrected image:](https://github.com/windmip/CarND-Advanced-Lane-Lines/blob/master/output_images/test2_warped.jpg)
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
+It is the 6th code cell. The OpenCV function GetPerspectiveTransform was used two times, to get the perspective transform matrix and get the invert matrix too. Source points were chosen manually selecting two close and two distant points of each line. I had to go back here from curvature calculation to fine tune that result with slightly modifying ytop1 and ytop2 here.
+
+Souce coordinates:
+
+Destination coordinates:
 
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
