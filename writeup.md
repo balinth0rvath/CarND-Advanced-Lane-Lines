@@ -52,15 +52,23 @@ Raw data of filter 2 and 3 could be used directly, filter 1 had to be converted 
 ![Corrected image:](https://github.com/windmip/CarND-Advanced-Lane-Lines/blob/master/output_images/test2_warped.jpg)
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
-It is the 6th code cell. The OpenCV function GetPerspectiveTransform was used two times, to get the perspective transform matrix and get the invert matrix too. Source points were chosen manually selecting two close and two distant points of each line. I had to go back here from curvature calculation to fine tune that result with slightly modifying ytop1 and ytop2 here.
+It is the 6th code cell. The OpenCV function GetPerspectiveTransform was used two times, to get the perspective transform matrix and get the invert matrix too. Source points were chosen manually selecting two close and two distant points of each line.
 
-Souce coordinates:
+_note: I had to go back here from curvature calculation to fine tune curvature result with slightly modifying ytop1 and ytop2 here._
 
-Destination coordinates:
+<pre>
+Souce coordinates: 
+top1    [ 100, 719]  top2    [ 553, 450] 
+bottom1 [ 737, 450]  bottom2 [1200, 719]
 
+Destination coordinates: 
+top3    [100,719]    top4    [100, 100] 
+bottom3 [1210, 100]  bottom4 [1200,719]
+</pre>
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
-
+There are two functions supporting this functionality: __polyfit_sliding_window__ and __find_lane_pixels__.
+__find_lane_pixels__ is used to determine pixels of a line. It is based on sliding window algorithm. First the algorythm finds the start of the line by creating a historgram (#8) of the sum of the active pixels projected to the x axis from the bottom half of the  screen. Luckily perspective transform cuts off the unrelevant noise from the image so the bottom half of the image usually contains useful shards of vertical lines that form the traffic lines IRL. So the first two bound boxes are positioned to the start of the line. (#17 #20) An loop iterates over the seven sliding windows (#51) (I found that seven window handles misaligning better than nine) After the coordinates are calculated (#53), the active pixels were collected from here (#64), then the x coordinate of next sliding window above was averaged (#74) from the x position of the collected pixels. After the iteration is finished, all of the line pixel passed back to __polyfit_sliding_window__
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
