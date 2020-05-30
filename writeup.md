@@ -22,7 +22,7 @@ The goals / steps of this project are the following:
 
 ### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
 
-Code cell number consisting the relevant code is given in every rubric point, and line numbers are referenced too, like (#11)
+Code cell number containing the relevant code is given in every rubric point, and line numbers are referenced too, like (#11)
 
 ### Camera Calibration
 
@@ -53,7 +53,7 @@ Raw data of filter 2 and 3 could be used directly, filter 1 had to be converted 
 ![Warped image:](https://github.com/windmip/CarND-Advanced-Lane-Lines/blob/master/output_images/test2_warped.jpg)
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
-It is the 6th code cell. The OpenCV function GetPerspectiveTransform was used two times (#16,#17), to get the perspective transform matrix and get the invert matrix too. Source points were chosen manually selecting two close and two distant points of each line.
+It is the 6th code cell. The OpenCV function __GetPerspectiveTransform__ was used two times (#16,#17), to get the perspective transform matrix and get the invert matrix too. Source points were chosen manually selecting two close and two distant points of each line.
 
 _note: I had to go back here from curvature calculation to fine tune curvature result with slightly modifying ytop1 and ytop2 here._
 
@@ -72,7 +72,7 @@ bottom3 [1210, 100]  bottom4 [1200,719]
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 There are two functions supporting this functionality: __polyfit_sliding_window__ and __find_lane_pixels__ in the 7th code cell. <br >
-__find_lane_pixels__ is used to determine pixels of a line. It is based on sliding window algorithm. First the algorythm finds the start of the line by creating a historgram (#8) of the sum of the active pixels projected to the x axis from the bottom half of the  screen. Luckily perspective transform cuts off the unrelevant noise from the image so the bottom half of the image usually contains useful shards of vertical lines that form the traffic lines IRL. So the first two bound boxes are positioned to the start of the line. (#17 #20) An loop iterates over the seven sliding windows (#51) (I found that seven window handles misaligning better than nine) After the coordinates are calculated (#53), the active pixels were collected from here (#64), then the x coordinate of next sliding window above was averaged (#74) from the x position of the collected pixels. After the iteration is finished, all of the line pixel passed back to <br >
+__find_lane_pixels__ is used to determine pixels of a line. It is based on sliding window algorithm. First the algorythm finds the start of the line by creating a historgram (#8) of the sum of the active pixels projected to the x axis from the bottom half of the  screen. Perspective transform cuts off the unrelevant noise from the image so the bottom half of the image usually contains useful shards of vertical lines that form the traffic lines IRL. The first two bound boxes are positioned to the start of the line. (#17 #20) A loop iterates over the seven sliding windows (#51) (I found that seven window handles misaligning better than nine) After the coordinates are calculated (#53), the active pixels were collected from here (#64), then the x coordinate of next sliding window above was averaged (#74) from the x position of the collected pixels. After the iteration is finished, all of the line pixel passed back to <br >
 __polyfit_sliding_window__ This function fits a pair of quadratic polynomials to each set of points. The first two polys (#100, #101) are in pixel space and used to draw the green semi-transparent shape on the image. Another two (#104, #105) 2 degree polynomials were calculated in real world space used to calculate carvatives. The polynomials were calculated along the y axis #111, because of the vertical orientation.
 
 ![Fit image:](https://github.com/windmip/CarND-Advanced-Lane-Lines/blob/master/output_images/test2_line_sliding_windows.jpg)
