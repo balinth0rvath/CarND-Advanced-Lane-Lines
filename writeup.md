@@ -26,7 +26,12 @@ The goals / steps of this project are the following:
 ### Camera Calibration
 
 #### 1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
+Camera calibration has done in the second code cell, in the camera_calirbration function. First, it generates a 9x6x1 array for object points. There are lots photos of a 9*6 chessboard pattern taken from different angles in the given path, the code reads all of the jpgs from there. These images must be converted from RGB to grayscale format with the OpenCV cvtColor function.
+Then findChessboardCorners OpenCV function was used to get the 2D image points. Then the calibrateCamera OpenCV function was used to get the camera matrix and distortion coefficients by passing it the object point, and image point arrays. 
 
+_note: Processing calibration1.jpg calibration4.jpg and calibration5.jpg were failed. There were missing corners on these images, I think._  
+
+![Corrected image:](http://github.com/windmip/CarND-Advanced-Lane-Lines/output_images/calibrated.jpg)
 
 ### Pipeline (single images)
 
