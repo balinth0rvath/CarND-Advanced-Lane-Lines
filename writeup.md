@@ -82,13 +82,14 @@ The __calculate_curvative__ function in the 8th code cell calculates the curvati
 _note: I found that line detection errors had very big impact on this value, so I had to average it on the last five frames._
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
+The merged image is created (#13) in the __merge_image__ function, it is in the 9th code cell. Averaged curvative and center offset are also drawed here (#16)
 ![Merged image:](https://github.com/windmip/CarND-Advanced-Lane-Lines/blob/master/output_images/test2_merged.jpg)
 
 ### Pipeline (video)
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a [link to my video result]
+Here's a [link to my video result](https://github.com/windmip/CarND-Advanced-Lane-Lines/blob/master/output.mp4)
 
 ---
 
@@ -96,4 +97,6 @@ Here's a [link to my video result]
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+There were lots of failed detections, and miscalculated curvatures so I started to use the tracking/smoothing idea from the Tips and Trick chapter. The frames were tracked by the __save_line__ function into the __Line__ class. The mean x coordinates of the plotted polynomial were saved (#11), so the the mean x coordinates of the previous 5 frames (#57). The average curvature of the last 5 frames of each line are also stored. (#59) The offset from the center was calculated (#80) based on that the lane width is 3.7m in the real world (#78) , and on the picture it is about 930 pixels. The __sanity_check__ function compared the lower point of each line in the last frame to the averaged one, and signed the frame undetected if the result differed more than 100 pixels from the averaged one. (#12,#21) The last good frame were drawn in the undetected frames. (#30) <br >
+My pipeline failed to work on the challenge videos: it lost track when shadows came in, or if there were different materials formed lines on the road. It could be handled with a pair of averaged polynomials instead of sliding windows in the fitting method. 
+It lost track also when the steep curves came out from the perspective window. I think a dynamic perspective window border calculation could help this issue.
